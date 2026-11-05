@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+    
+<ContentPage 
+    x:Class="MyGarage.Pages.ServiceLogPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Service log">
+
+    <Grid Padding="20"
+          RowDefinitions="Auto,*"
+          RowSpacing="15">
+
+        <VerticalStackLayout Grid.Row="0" Spacing="5">
+
+            <Label
+                Text="Service log"
+                FontSize="26"
+                FontAttributes="Bold" />
+
+            <Label
+                Text="{Binding SelectedVehicle.Brand}"
+                FontSize="20"
+                FontAttributes="Bold" />
+
+            <Label
+                Text="{Binding SelectedVehicle.Model}"
+                FontSize="16"
+                TextColor="Gray" />
+
+            <Label
+                Text="{Binding SelectedVehicle.LicensePlate}"
+                FontSize="14"
+                TextColor="Gray" />
+
+            <Button
+                Text="New service record"
+                Command="{Binding AddServiceRecordCommand}" />
+
+        </VerticalStackLayout>
+
+        <CollectionView
+            Grid.Row="1"
+            ItemsSource="{Binding ServiceRecords}">
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Spacing="10">
+
+                    <Label
+                        Text="There are no service records for this vehicle."
+                        FontSize="17"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="Service records will appear here."
+                        FontSize="14"
+                        TextColor="Gray"
+                        HorizontalTextAlignment="Center" />
+
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border
+                        Padding="15"
+                        Margin="0,5"
+                        Stroke="#D0D0D0"
+                        StrokeThickness="1">
+
+                        <VerticalStackLayout Spacing="8">
+
+                            <Label
+                                Text="{Binding Description}"
+                                FontSize="18"
+                                FontAttributes="Bold" />
+
+                            <Label
+                                Text="{Binding Date, StringFormat='Date: {0:yyyy.MM.dd}'}"
+                                FontSize="14" />
+
+                            <Label
+                                Text="{Binding Odometer, StringFormat='Odometer: {0} km'}"
+                                FontSize="14" />
+
+                            <Label
+                                Text="{Binding Cost, StringFormat='Cost: {0} HUF'}"
+                                FontSize="14" />
+
+                            <Button
+                                Text="Edit record"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditServiceRecordCommand}"
+                                CommandParameter="{Binding .}" />
+
+                            <Button
+                                Text="Delete record"
+                                BackgroundColor="#C62828"
+                                TextColor="White"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteServiceRecordCommand}"
+                                CommandParameter="{Binding .}" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>

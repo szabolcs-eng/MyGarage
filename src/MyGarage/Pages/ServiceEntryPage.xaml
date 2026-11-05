@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="MyGarage.Pages.ServiceEntryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Service record">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="25" Spacing="12">
+
+            <Label
+                Text="New service record"
+                FontSize="26"
+                FontAttributes="Bold" />
+
+            <Label Text="Date" />
+            <Entry
+                Placeholder="YYYY-MM-DD"
+                Text="{Binding Date}" />
+
+            <Label Text="Odometer reading km" />
+            <Entry
+                Placeholder="Example: 245000"
+                Keyboard="Numeric"
+                Text="{Binding Odometer}" />
+
+            <Label Text="Service description" />
+            <Editor
+                Placeholder="Example: Engine oil and oil filter change"
+                AutoSize="TextChanges"
+                HeightRequest="100"
+                Text="{Binding Description}" />
+
+            <Label Text="Cost HUF" />
+            <Entry
+                Placeholder="Example: 45000"
+                Keyboard="Numeric"
+                Text="{Binding Cost}" />
+
+            <Label
+                Text="{Binding ErrorMessage}"
+                TextColor="Red"
+                FontSize="14" />
+
+            <Button
+                Text="Save service record"
+                Command="{Binding SaveCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

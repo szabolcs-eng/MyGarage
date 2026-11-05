@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="MyGarage.Pages.VehicleEntryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="New vehicle">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="25" Spacing="15">
+
+            <Label
+                Text="Add new vehicle"
+                FontSize="26"
+                FontAttributes="Bold" />
+
+            <Label Text="Brand" />
+            <Entry
+                Placeholder="Example: Volkswagen"
+                Text="{Binding Brand}" />
+
+            <Label Text="Model" />
+            <Entry
+                Placeholder="Example: Passat"
+                Text="{Binding Model}" />
+
+            <Label Text="License Plate" />
+            <Entry
+                Placeholder="Example: ABC-123"
+                Text="{Binding LicensePlate}" />
+
+            <Label Text="Production Year" />
+            <Entry
+                Placeholder="Example: 2003"
+                Keyboard="Numeric"
+                Text="{Binding Year}" />
+
+            <Label
+                Text="{Binding ErrorMessage}"
+                TextColor="Red"
+                FontSize="14" />
+
+            <Button
+                Text="Save Vehicle"
+                Command="{Binding SaveCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
