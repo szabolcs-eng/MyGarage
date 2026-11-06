@@ -74,6 +74,11 @@ namespace MyGarage.ViewModels
 
             await _repo.DeleteAsync(record);
 
+            if (!string.IsNullOrWhiteSpace(record.InvoiceImagePath) && File.Exists(record.InvoiceImagePath))
+            {
+                File.Delete(record.InvoiceImagePath);
+            }
+
             ServiceRecords.Remove(record);
         }
 

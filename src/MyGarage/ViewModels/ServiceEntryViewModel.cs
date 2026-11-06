@@ -159,7 +159,15 @@ namespace MyGarage.ViewModels
 
                 await sourceStream.CopyToAsync(destinationStream);
 
+                string oldImagePath = InvoiceImagePath;
+
                 InvoiceImagePath = filePath;
+
+                if (!string.IsNullOrWhiteSpace(oldImagePath) && File.Exists(oldImagePath))
+                {
+                    File.Delete(oldImagePath);
+                }
+
                 ErrorMessage = string.Empty;
             }
             catch (Exception ex)
