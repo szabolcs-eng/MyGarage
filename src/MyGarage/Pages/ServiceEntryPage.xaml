@@ -43,6 +43,34 @@
                 TextColor="Red"
                 FontSize="14" />
 
+            <Label 
+                Text="Invoice or parts photo" />
+
+            <Button
+                Text="Take photo"
+                Command="{Binding TakePhotoCommand}" />
+
+            <Image
+                Source="{Binding InvoiceImagePath}"
+                HeightRequest="200"
+                Aspect="AspectFit" />
+
+            <Label Text="Service location" />
+
+            <Button
+                Text="Get location"
+                Command="{Binding GetLocationCommand}" />
+
+            <Label
+                Text="{Binding LocationLat, StringFormat='Latitude: {0}'}"
+                FontSize="13"
+                TextColor="Gray" />
+
+            <Label
+                Text="{Binding LocationLon, StringFormat='Longitude: {0}'}"
+                FontSize="13"
+                TextColor="Gray" />
+
             <Button
                 Text="Save service record"
                 Command="{Binding SaveCommand}" />

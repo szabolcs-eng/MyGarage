@@ -2,9 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using MyGarage.Models;
 using MyGarage.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MyGarage.ViewModels
 {
@@ -37,7 +34,16 @@ namespace MyGarage.ViewModels
         [ObservableProperty]
         private string errorMessage = string.Empty;
 
-        
+        [ObservableProperty]
+        private string invoiceImagePath = string.Empty;
+
+        [ObservableProperty]
+        private double? locationLat;
+
+        [ObservableProperty]
+        private double? locationLon;
+
+
         public ServiceEntryViewModel(IServiceRecordRepository repo)
         {
             _repo = repo;
@@ -56,6 +62,9 @@ namespace MyGarage.ViewModels
             Odometer = record.Odometer.ToString();
             Description = record.Description;
             Cost = record.Cost.ToString();
+            InvoiceImagePath = record.InvoiceImagePath;
+            LocationLat = record.LocationLat;
+            LocationLon = record.LocationLon;
         }
 
 
@@ -115,10 +124,77 @@ namespace MyGarage.ViewModels
             record.Odometer = odometerValue;
             record.Description = Description.Trim();
             record.Cost = costValue;
+            record.InvoiceImagePath = InvoiceImagePath;
+            record.LocationLat = LocationLat;
+            record.LocationLon = LocationLon;
 
             await _repo.SaveAsync(record);
 
             await Shell.Current.GoToAsync("..");
         }
+
+
+
+        [RelayCommand]
+        private async Task TakePhotoAsync()
+        {
+            try
+            {
+                if (!MediaPicker.Default.IsCaptureSupported)
+                {
+                    ErrorMessage = "Photo capture is not supported!";
+                    return;
+                }
+
+                FileResult? photo = await MediaPicker.Default.CapturePhotoAsync();
+
+                if (photo == null) return;
+
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
+
+                string filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+
+                using Stream sourceStream = await photo.OpenReadAsync();
+                using FileStream destinationStream = File.Create(filePath);
+
+                await sourceStream.CopyToAsync(destinationStream);
+
+                InvoiceImagePath = filePath;
+                ErrorMessage = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Failed to capture photo!" + ex.Message;
+            }
+        }
+
+
+
+        [RelayCommand]
+        private async Task GetLocationAsync()
+        {
+            try
+            {
+                var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+
+                Location? location = await Geolocation.Default.GetLocationAsync(request);
+
+                if (location == null)
+                {
+                    ErrorMessage = "Location not found!";
+                    return;
+                }
+
+                LocationLat = location.Latitude;
+                LocationLon = location.Longitude;
+
+                ErrorMessage = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Failed to get location!" + ex.Message;
+            }
+        }
+
     }
 }

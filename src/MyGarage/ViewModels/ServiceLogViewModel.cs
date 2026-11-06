@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using MyGarage.Models;
 using MyGarage.Pages;
-using MyGarage.Repositories;
 using MyGarage.Repositories.Interfaces;
 using System.Collections.ObjectModel;
 
@@ -14,7 +13,7 @@ namespace MyGarage.ViewModels
 
 
         [ObservableProperty]
-        private Vehicle? selectedVehicle;    
+        private Vehicle? selectedVehicle;
 
         public ObservableCollection<ServiceRecord> ServiceRecords { get; } = new();
 
@@ -54,10 +53,10 @@ namespace MyGarage.ViewModels
             if (record == null) return;
 
             await Shell.Current.GoToAsync(nameof(ServiceEntryPage), new Dictionary<string, object>
-                {
-                    ["Vehicle"] = SelectedVehicle!,
-                    ["Record"] = record
-                });
+            {
+                ["Vehicle"] = SelectedVehicle!,
+                ["Record"] = record
+            });
         }
 
         [RelayCommand]
@@ -76,6 +75,23 @@ namespace MyGarage.ViewModels
             await _repo.DeleteAsync(record);
 
             ServiceRecords.Remove(record);
+        }
+
+
+        [RelayCommand]
+        private async Task OpenLocationAsync(ServiceRecord? record)
+        {
+            if (record == null) return;
+
+            if (record.LocationLat == null || record.LocationLon == null)
+            {
+                await Shell.Current.DisplayAlertAsync("Location not available", "The location for this service record is not available.", "OK");
+                return;
+            }
+
+            var location = new Location(record.LocationLat.Value, record.LocationLon.Value);
+
+            await Map.Default.OpenAsync(location);
         }
     }
 }

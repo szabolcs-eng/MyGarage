@@ -102,6 +102,11 @@
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteServiceRecordCommand}"
                                 CommandParameter="{Binding .}" />
 
+                            <Button
+                                Text="View location on map"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenLocationCommand}"
+                                CommandParameter="{Binding .}" />
+
                         </VerticalStackLayout>
 
                     </Border>
